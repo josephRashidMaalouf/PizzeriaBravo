@@ -1,10 +1,8 @@
-﻿namespace FoodStuffService.Domain.Models;
+﻿namespace FoodStuffService.Dtos;
 
-public class Result<T>
+public class ResultDto<T> where T : class
 {
     public bool IsSuccess { get; set; }
     public T? Data { get; set; }
-    
-    public int Code { get; set; }
     public string? Message { get; set; }
 }
