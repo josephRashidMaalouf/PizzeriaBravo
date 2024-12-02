@@ -3,5 +3,5 @@
 public class FoodStuff : EntityBase
 {
     public required string Name { get; set; }
-    public required int Price { get; set; }
+    public required double Price { get; set; }
 }

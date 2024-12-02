@@ -7,22 +7,17 @@ public static class FoodStuffEndpoints
 {
     public static IEndpointRouteBuilder MapEndPoints(this IEndpointRouteBuilder app)
     {
-        app.MapGroup("api/food-stuffs");
+        var group = app.MapGroup("api/food-stuffs");
 
-        app.MapGet("", GetAll)
-            .WithName("FoodStuffs");
+        group.MapGet("", GetAll).WithName("GetAll");
         
-        app.MapGet("{id}", GetById)
-            .WithName("FoodStuffs");
+        group.MapGet("{id}", GetById);
         
-        app.MapPost("", Create)
-            .WithName("FoodStuffs");
+        group.MapPost("{id}", Create);
         
-        app.MapPut("", Update)
-            .WithName("FoodStuffs");
+        group.MapPut("", Update);
         
-        app.MapDelete("", Delete)
-            .WithName("FoodStuffs");
+        group.MapDelete("{id}", Delete);
         
         return app;
     }
