@@ -1,6 +1,7 @@
 using FoodStuffService.Domain.Interfaces;
 using FoodStuffService.Infrastructure.Repositories;
 using FoodStuffService.Application.Services;
+using FoodStuffService.EndpointExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,9 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapEndPoints();
+
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
