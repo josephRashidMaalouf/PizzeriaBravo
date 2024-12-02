@@ -27,9 +27,11 @@ public class FoodStuffRepository : IFoodStuffRepository
             var foodStuffs = await _collection.FindAsync(filter);
             result.Data = await foodStuffs.ToListAsync();
             result.IsSuccess = true;
+            result.Code = 200;
         }
         catch (Exception ex)
         {
+            result.Code = 500;
             result.IsSuccess = false;
             result.Message = ex.Message;
         }
@@ -44,12 +46,24 @@ public class FoodStuffRepository : IFoodStuffRepository
         try
         {
             var filter = Builders<FoodStuff>.Filter.Eq(x => x.Id, id);
-            var foodStuff = await _collection.Find(filter).FirstAsync();
+            var foodStuff = await _collection.Find(filter).FirstOrDefaultAsync();
+            
+            if (foodStuff is null)
+            {
+                result.IsSuccess = false;
+                result.Message = $"No entity with id: {id} found";
+                result.Code = 404;
+                
+                return result;
+            }
+            
+            result.Code = 200;
             result.IsSuccess = true;
             result.Data = foodStuff;
         }
         catch (Exception ex)
         {
+            result.Code = 500;
             result.IsSuccess = false;
             result.Message = ex.Message;
         }
@@ -66,9 +80,11 @@ public class FoodStuffRepository : IFoodStuffRepository
             await _collection.InsertOneAsync(foodStuff);
             result.IsSuccess = true;
             result.Data = foodStuff;
+            result.Code = 200;
         }
         catch (Exception e)
         {
+            result.Code = 500;
            result.IsSuccess = false;
            result.Message = e.Message;
         }
@@ -85,13 +101,24 @@ public class FoodStuffRepository : IFoodStuffRepository
             var filter = Builders<FoodStuff>.Filter.Eq(x => x.Id, id);
             var options = new ReplaceOptions { IsUpsert = true };
 
-            await _collection.ReplaceOneAsync(filter, foodStuff, options);
-
+            var updateResult = await _collection.ReplaceOneAsync(filter, foodStuff, options);
+            
+            if (updateResult.MatchedCount == 0)
+            {
+                result.IsSuccess = false;
+                result.Message = $"No entity with id: {id} found";
+                result.Code = 404;
+                
+                return result;
+            }
+            
+            result.Code = 200;
             result.IsSuccess = true;
             result.Data = foodStuff;
         }
         catch (Exception ex)
         {
+            result.Code = 500;
             result.IsSuccess = false;
             result.Message = ex.Message;
         }
@@ -106,13 +133,24 @@ public class FoodStuffRepository : IFoodStuffRepository
         try
         {
             var filter = Builders<FoodStuff>.Filter.Eq(x => x.Id, id);
-            await _collection.DeleteOneAsync(filter);
+            var deleteResult = await _collection.DeleteOneAsync(filter);
 
+            if (deleteResult.DeletedCount == 0)
+            {
+                result.IsSuccess = false;
+                result.Message = $"No entity with id: {id} found";
+                result.Code = 404;
+                
+                return result;
+            }
+            
+            result.Code = 200;
             result.IsSuccess = true;
             result.Data = true;
         }
         catch(Exception ex)
         {
+            result.Code = 500;
             result.IsSuccess = false;
             result.Message = "Error deleting food stuff";
         }
