@@ -6,4 +6,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\FoodStuffService.Application\FoodStuffService.Application.csproj" />
+      <ProjectReference Include="..\FoodStuffService.Domain\FoodStuffService.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
+    </ItemGroup>
+
 </Project>
