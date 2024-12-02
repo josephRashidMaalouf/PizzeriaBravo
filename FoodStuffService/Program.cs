@@ -1,4 +1,25 @@
+using FoodStuffService.Domain.Interfaces;
+using FoodStuffService.Infrastructure.Repositories;
+using FoodStuffService.Application.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var dbName = builder.Configuration.GetSection("Database")["Name"] ?? "";
+var collectionName = builder.Configuration.GetSection("Database")["CollectionName"] ?? "";
+var connectionString = builder.Configuration.GetConnectionString("DockerConnection") ?? "";
+
+#if DEBUG
+connectionString = builder.Configuration.GetConnectionString("LocalConnection") ?? "";
+#endif
+
+builder.Services.AddScoped<IFoodStuffRepository, FoodStuffRepository>(provider => 
+    new FoodStuffRepository(dbName, collectionName, connectionString));
+
+builder.Services.AddScoped<IFoodStuffService, FoodStuffService.Application.Services.FoodStuffService>();
+
+
+
+
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -13,25 +34,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
 
 app.Run();
 
