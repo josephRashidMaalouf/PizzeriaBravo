@@ -7,5 +7,6 @@ public class EntityBase
 {
     [BsonId]
     [BsonRepresentation(BsonType.String)] 
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public required Guid Id { get; set; } = Guid.NewGuid();
+    
 }
