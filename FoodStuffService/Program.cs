@@ -1,7 +1,8 @@
 using FoodStuffService.Domain.Interfaces;
 using FoodStuffService.Infrastructure.Repositories;
-using FoodStuffService.Application.Services;
+using FoodStuffService.Domain.Converters;
 using FoodStuffService.EndpointExtensions;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,10 @@ builder.Services.AddScoped<IFoodStuffRepository, FoodStuffRepository>(provider =
 
 builder.Services.AddScoped<IFoodStuffService, FoodStuffService.Application.Services.FoodStuffService>();
 
-
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new GuidConverter());
+});
 
 
 
