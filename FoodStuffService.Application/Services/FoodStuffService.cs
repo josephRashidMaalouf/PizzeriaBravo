@@ -28,7 +28,7 @@ public class FoodStuffService(IFoodStuffRepository repository) : IFoodStuffServi
         return await _repository.UpdateAsync(id, foodStuff);
     }
 
-    public async Task<Result<bool>> DeleteAsync(Guid id)
+    public async Task<Result<object>> DeleteAsync(Guid id)
     {
         return await _repository.DeleteAsync(id);
     }

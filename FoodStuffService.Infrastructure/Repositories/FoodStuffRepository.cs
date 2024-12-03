@@ -126,9 +126,9 @@ public class FoodStuffRepository : IFoodStuffRepository
         return result;
     }
 
-    public async Task<Result<bool>> DeleteAsync(Guid id)
+    public async Task<Result<object>> DeleteAsync(Guid id)
     {
-        var result = new Result<bool>();
+        var result = new Result<object>();
 
         try
         {
@@ -146,13 +146,12 @@ public class FoodStuffRepository : IFoodStuffRepository
             
             result.Code = 200;
             result.IsSuccess = true;
-            result.Data = true;
         }
         catch(Exception ex)
         {
             result.Code = 500;
             result.IsSuccess = false;
-            result.Message = "Error deleting food stuff";
+            result.Message = ex.Message;
         }
         
         return result;

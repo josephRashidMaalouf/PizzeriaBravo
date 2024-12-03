@@ -9,5 +9,5 @@ public interface ICrud<T> where T : EntityBase
     Task<Result<T>> GetByIdAsync(Guid id);
     Task<Result<T>> CreateAsync(T foodStuff);
     Task<Result<T>> UpdateAsync(Guid id, T foodStuff);
-    Task<Result<bool>> DeleteAsync(Guid id);
+    Task<Result<object>> DeleteAsync(Guid id);
 }
