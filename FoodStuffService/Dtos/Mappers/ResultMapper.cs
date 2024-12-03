@@ -5,13 +5,14 @@ namespace FoodStuffService.Dtos.Mappers;
 
 public static class ResultMapper
 {
-    public static ResultDto<FoodStuff> ToDto(this Result<FoodStuff> result)
+    public static ResultDto<T> ToDto<T>(this Result<T> result) 
     {
-        return new ResultDto<FoodStuff>
+        return new ResultDto<T>
         {
             Data = result.Data,
             Message = result.Message,
             IsSuccess = result.IsSuccess,
         };
     }
+    
 }
