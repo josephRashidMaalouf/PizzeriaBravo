@@ -21,10 +21,16 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # Build the Docker image
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag josephrashidmaalouf/pizzeria-bravo-food-stuff-service:$(date +%Y%m%d%H%M%S)
+    # Build and tag the Docker image with a timestamp
+    - name: Build and tag the Docker image
+      run: |
+        docker build . --file Dockerfile --tag josephrashidmaalouf/pizzeria-bravo-food-stuff-service:$(date +%Y%m%d%H%M%S)
+        docker tag josephrashidmaalouf/pizzeria-bravo-food-stuff-service:$(date +%Y%m%d%H%M%S) josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
 
-    # Push the Docker image
-    - name: Push the Docker image
+    # Push the timestamped Docker image
+    - name: Push the timestamped Docker image
       run: docker push josephrashidmaalouf/pizzeria-bravo-food-stuff-service:$(date +%Y%m%d%H%M%S)
+
+    # Push the latest tag
+    - name: Push the latest Docker image
+      run: docker push josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
