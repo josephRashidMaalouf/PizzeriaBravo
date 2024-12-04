@@ -9,11 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var dbName = builder.Configuration.GetSection("Database")["Name"] ?? "";
 var collectionName = builder.Configuration.GetSection("Database")["CollectionName"] ?? "";
-var connectionString = builder.Configuration.GetConnectionString("DockerConnection") ?? "";
-
-#if DEBUG
-connectionString = builder.Configuration.GetConnectionString("LocalConnection") ?? "";
-#endif
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 
 builder.Services.AddScoped<IFoodStuffRepository, FoodStuffRepository>(provider =>
     new FoodStuffRepository(dbName, collectionName, connectionString));

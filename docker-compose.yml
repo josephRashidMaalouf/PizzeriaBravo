@@ -27,8 +27,28 @@ services:
     environment:
       ConnectionStrings__DefaultConnection: "mongodb://mongodb:27017"
 
+  order-service:
+    image: ahedberg/pizzeriabravo-orderservice:latest
+    container_name: order-service
+    ports:
+      - "3003:8080"
+    depends_on:
+      - mongodb
+    environment:
+      ConnectionStrings__DefaultConnection: "mongodb://mongodb:27017"
+
+  customer-service:
+    environment:
+    - MSSQL_SA_PASSWORD=SuperSafePass.123
+    container_name: customer-service
+    image: arialind/pizzeriabravo-customerservice-api:latest
+    ports:
+      - "3002:3002"
+    depends_on:
+      - sqlserver
+
   pizza-service:
-    image: metalcow/pizzaservice:1.2
+    image: metalcow/pizzaservice:latest
     container_name: pizza-service
     ports:
       - "3001:8080"
