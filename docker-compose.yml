@@ -1,0 +1,42 @@
+#version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "SuperSafePass.123"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  food-stuff-service:
+    image: josephrashidmaalouf/pizzeria-bravo-food-stuff-service:1.0
+    container_name: food-stuff-service
+    ports:
+      - "3004:8080"
+    depends_on:
+      - mongodb
+    environment:
+      ConnectionStrings__DefaultConnection: "mongodb://mongodb:27017"
+
+  pizza-service:
+    image: metalcow/pizzaservice:1.2
+    container_name: pizza-service
+    ports:
+      - "3001:8080"
+    depends_on:
+      - sqlserver
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=PizzaDb;User Id=sa;Password=SuperSafePass.123;TrustServerCertificate=True;"
+
+volumes:
+  mongodb_data:
+  sqlserver_data:
