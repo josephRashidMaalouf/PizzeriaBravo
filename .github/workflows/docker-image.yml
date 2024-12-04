@@ -25,7 +25,10 @@ jobs:
     - name: Build and tag the Docker image as latest
       run: |
         docker build . --file Dockerfile --tag josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
+        docker build . --file Dockerfile --tag josephrashidmaalouf/pizzeria-bravo-food-stuff-service:${{ github.run_id }}
 
     # Push the latest Docker image
     - name: Push the latest Docker image
-      run: docker push josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
+      run: | 
+        docker push josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
+        docker push josephrashidmaalouf/pizzeria-bravo-food-stuff-service:${{ github.run_id }}
