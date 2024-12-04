@@ -22,7 +22,6 @@ public static class FoodStuffEndpoints
         
         group.MapDelete("{id}", Delete);
 
-        group.MapGet("/ci", () => "tjoho!");
         
         return app;
     }
