@@ -12,7 +12,7 @@ public static class FoodStuffEndpoints
     {
         var group = app.MapGroup("api/food-stuffs");
 
-        group.MapGet("", GetAll).WithName("GetAll");
+        group.MapGet("", GetAll);
         
         group.MapGet("{id}", GetById);
         

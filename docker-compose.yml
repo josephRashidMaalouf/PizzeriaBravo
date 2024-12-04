@@ -18,7 +18,7 @@ services:
       - sqlserver_data:/var/opt/mssql
 
   food-stuff-service:
-    image: josephrashidmaalouf/pizzeria-bravo-food-stuff-service:1.0
+    image: josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
     container_name: food-stuff-service
     ports:
       - "3004:8080"
