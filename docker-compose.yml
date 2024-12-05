@@ -21,7 +21,7 @@ services:
     image: josephrashidmaalouf/pizzeria-bravo-food-stuff-service:latest
     container_name: food-stuff-service
     ports:
-      - "3004:8080"
+      - "3004:3004"
     depends_on:
       - mongodb
     environment:
@@ -32,7 +32,7 @@ services:
     image: ahedberg/pizzeriabravo-orderservice:dev
     container_name: order-service
     ports:
-      - "3003:8080"
+      - "3003:3003"
     depends_on:
       - mongodb
     environment:
@@ -54,7 +54,7 @@ services:
     image: metalcow/pizzaservice:latest
     container_name: pizza-service
     ports:
-      - "3001:8080"
+      - "3001:3001"
     depends_on:
       - sqlserver
     environment:
