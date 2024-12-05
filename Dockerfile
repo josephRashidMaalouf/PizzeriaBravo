@@ -33,4 +33,8 @@ RUN dotnet publish "FoodStuffService.csproj" -c Release -o /app/publish /p:UseAp
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+EXPOSE 3004
+ENV ASPNETCORE_URLS=http://+:3004
+
 ENTRYPOINT ["dotnet", "FoodStuffService.dll"]

@@ -26,9 +26,10 @@ services:
       - mongodb
     environment:
       ConnectionStrings__DefaultConnection: "mongodb://mongodb:27017"
+    pull_policy: always
 
   order-service:
-    image: ahedberg/pizzeriabravo-orderservice:latest
+    image: ahedberg/pizzeriabravo-orderservice:dev
     container_name: order-service
     ports:
       - "3003:8080"
@@ -36,6 +37,7 @@ services:
       - mongodb
     environment:
       ConnectionStrings__DefaultConnection: "mongodb://mongodb:27017"
+    pull_policy: always
 
   customer-service:
     environment:
@@ -46,6 +48,7 @@ services:
       - "3002:3002"
     depends_on:
       - sqlserver
+    pull_policy: always
 
   pizza-service:
     image: metalcow/pizzaservice:latest
@@ -56,6 +59,7 @@ services:
       - sqlserver
     environment:
       ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=PizzaDb;User Id=sa;Password=SuperSafePass.123;TrustServerCertificate=True;"
+    pull_policy: always
 
 volumes:
   mongodb_data:
