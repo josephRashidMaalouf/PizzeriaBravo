@@ -1,5 +1,3 @@
-#version: '3.8'
-
 services:
   mongodb:
     image: mongo:latest
@@ -12,7 +10,7 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "SuperSafePass.123"
+      MSSQL_SA_PASSWORD: "SuperSafePass.123"
       ACCEPT_EULA: "Y"
     volumes:
       - sqlserver_data:/var/opt/mssql
@@ -29,7 +27,7 @@ services:
     pull_policy: always
 
   order-service:
-    image: ahedberg/pizzeriabravo-orderservice:dev
+    image: ahedberg/pizzeriabravo-orderservice:latest
     container_name: order-service
     ports:
       - "3003:3003"
@@ -41,14 +39,14 @@ services:
 
   customer-service:
     environment:
-    - MSSQL_SA_PASSWORD=SuperSafePass.123
+      - MSSQL_SA_PASSWORD=SuperSafePass.123
     container_name: customer-service
     image: arialind/pizzeriabravo-customerservice-api:latest
     ports:
       - "3002:3002"
+    pull_policy: always
     depends_on:
       - sqlserver
-    pull_policy: always
 
   pizza-service:
     image: metalcow/pizzaservice:latest
@@ -59,6 +57,17 @@ services:
       - sqlserver
     environment:
       ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=PizzaDb;User Id=sa;Password=SuperSafePass.123;TrustServerCertificate=True;"
+    pull_policy: always
+
+  gateway:
+    image: josephrashidmaalouf/pizzeria-bravo-gateway:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - food-stuff-service
+      - order-service
+      - customer-service
+      - pizza-service
     pull_policy: always
 
 volumes:
