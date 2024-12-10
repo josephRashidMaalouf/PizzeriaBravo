@@ -39,7 +39,7 @@ services:
 
   customer-service:
     environment:
-      - MSSQL_SA_PASSWORD=SuperSafePass.123
+    - MSSQL_SA_PASSWORD=SuperSafePass.123
     container_name: customer-service
     image: arialind/pizzeriabravo-customerservice-api:latest
     ports:
@@ -61,7 +61,7 @@ services:
 
   gateway:
     image: josephrashidmaalouf/pizzeria-bravo-gateway:latest
-    ports:
+    ports: 
       - "3000:3000"
     depends_on:
       - food-stuff-service
