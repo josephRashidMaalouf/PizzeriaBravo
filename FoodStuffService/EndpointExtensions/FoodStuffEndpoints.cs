@@ -52,48 +52,56 @@ public static class FoodStuffEndpoints
 
     private static async Task<IResult> Create(IMessageService messageService, FoodStuff foodStuff)
     {
-        await messageService.PublishMessageAsync(foodStuff);
+        var message = new Message<FoodStuff>()
+        {
+            Data = foodStuff,
+            MethodInfo = "post"
+        };
+        await messageService.PublishMessageAsync(message);
 
         var dto = new ResultDto<string>
         {
-            Data = "Message sent",
             IsSuccess = true,
+            Message = "Request was successfully sent to the queue."
         };
         
         return Results.Ok(dto);
-        
-        // var result = await foodStuffService.CreateAsync(foodStuff);
-        //
-        // var dto = result.ToDto();
-        //
-        // return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
+
     }
 
-    private static async Task<IResult> Update(IFoodStuffService foodStuffService, Guid id, FoodStuff foodStuff)
+    private static async Task<IResult> Update(IMessageService messageService, Guid id, FoodStuff foodStuff)
     {
-        var result = await foodStuffService.UpdateAsync(id, foodStuff);
-        
-        var dto = result.ToDto();
-        
-        if (result.Code == 404)
+        var message = new Message<FoodStuff>()
         {
-            return Results.NotFound(dto);
-        }
+            Data = foodStuff,
+            MethodInfo = "put"
+        };
+        await messageService.PublishMessageAsync(message);
+
+        var dto = new ResultDto<string>
+        {
+            IsSuccess = true,
+            Message = "Request was successfully sent to the queue."
+        };
         
-        return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
+        return Results.Ok(dto);
     }
 
-    private static async Task<IResult> Delete(IFoodStuffService foodStuffService, Guid id)
+    private static async Task<IResult> Delete(IMessageService messageService, Guid id)
     {
-        var result = await foodStuffService.DeleteAsync(id);
-        
-        var dto = result.ToDto();
-        
-        if (result.Code == 404)
+        var message = new Message<Guid>()
         {
-            return Results.NotFound(dto);
-        }
+            Data = id,
+            MethodInfo = "delete"
+        };
+        await messageService.PublishMessageAsync(message);
+
+        var dto = new ResultDto<string>
+        {
+            IsSuccess = true,
+            Message = "Request was successfully sent to the queue."
+        };
         
-        return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
+        return Results.Ok(dto);
     }
 }

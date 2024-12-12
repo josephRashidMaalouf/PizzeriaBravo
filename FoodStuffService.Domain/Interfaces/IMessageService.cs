@@ -1,8 +1,9 @@
 ﻿using FoodStuffService.Domain.Entities;
+using FoodStuffService.Dtos;
 
 namespace FoodStuffService.Domain.Interfaces;
 
 public interface IMessageService
 {
-    Task PublishMessageAsync(EntityBase message);
+    Task PublishMessageAsync<T>(Message<T> message);
 }
