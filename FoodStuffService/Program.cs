@@ -26,6 +26,9 @@ builder.Services.AddSingleton<IConnectionFactory, ConnectionFactory>(_ => new()
 {
     Uri = new Uri(builder.Configuration["RabbitMQ:MqUri"] ?? string.Empty),
     ClientProvidedName = builder.Configuration["RabbitMQ:ClientProvidedName"] ?? string.Empty,
+    HostName = builder.Configuration["RabbitMQ:HostName"] ?? string.Empty,
+    UserName = builder.Configuration["RabbitMQ:UserName"] ?? string.Empty,
+    Password = builder.Configuration["RabbitMQ:Password"] ?? string.Empty,
 });
 
 
