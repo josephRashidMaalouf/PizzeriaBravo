@@ -50,13 +50,23 @@ public static class FoodStuffEndpoints
         return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
     }
 
-    private static async Task<IResult> Create(IFoodStuffService foodStuffService, FoodStuff foodStuff)
+    private static async Task<IResult> Create(IMessageService messageService, FoodStuff foodStuff)
     {
-        var result = await foodStuffService.CreateAsync(foodStuff);
+        await messageService.PublishMessageAsync(foodStuff);
+
+        var dto = new ResultDto<string>
+        {
+            Data = "Message sent",
+            IsSuccess = true,
+        };
         
-        var dto = result.ToDto();
+        return Results.Ok(dto);
         
-        return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
+        // var result = await foodStuffService.CreateAsync(foodStuff);
+        //
+        // var dto = result.ToDto();
+        //
+        // return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
     }
 
     private static async Task<IResult> Update(IFoodStuffService foodStuffService, Guid id, FoodStuff foodStuff)

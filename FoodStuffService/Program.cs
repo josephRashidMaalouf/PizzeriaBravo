@@ -1,8 +1,10 @@
+using FoodStuffService.Application.Services;
 using FoodStuffService.Domain.Interfaces;
 using FoodStuffService.Infrastructure.Repositories;
 using FoodStuffService.Domain.Converters;
 using FoodStuffService.EndpointExtensions;
 using Microsoft.AspNetCore.Http.Json;
+using RabbitMQ.Client;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +17,17 @@ builder.Services.AddScoped<IFoodStuffRepository, FoodStuffRepository>(provider =
     new FoodStuffRepository(dbName, collectionName, connectionString));
 
 builder.Services.AddScoped<IFoodStuffService, FoodStuffService.Application.Services.FoodStuffService>();
+builder.Services.AddSingleton<IMessageService, RabbitMqService>();
+
 
 builder.Services.Configure<JsonOptions>(options => { options.SerializerOptions.Converters.Add(new GuidConverter()); });
+
+builder.Services.AddSingleton<IConnectionFactory, ConnectionFactory>(_ => new()
+{
+    Uri = new Uri(builder.Configuration["RabbitMQ:MqUri"] ?? string.Empty),
+    ClientProvidedName = builder.Configuration["RabbitMQ:ClientProvidedName"] ?? string.Empty,
+});
+
 
 
 // Add services to the container.
