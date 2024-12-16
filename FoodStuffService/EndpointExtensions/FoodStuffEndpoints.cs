@@ -50,58 +50,40 @@ public static class FoodStuffEndpoints
         return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
     }
 
-    private static async Task<IResult> Create(IMessageService messageService, FoodStuff foodStuff)
+    private static async Task<IResult> Create(IFoodStuffService foodStuffService, FoodStuff foodStuff)
     {
-        var message = new Message<FoodStuff>()
-        {
-            Data = foodStuff,
-            MethodInfo = "post"
-        };
-        await messageService.PublishMessageAsync(message);
-
-        var dto = new ResultDto<string>
-        {
-            IsSuccess = true,
-            Message = "Request was successfully sent to the queue."
-        };
+        var result = await foodStuffService.CreateAsync(foodStuff);
         
-        return Results.Ok(dto);
-
+        var dto = result.ToDto();
+        
+        return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
     }
 
-    private static async Task<IResult> Update(IMessageService messageService, Guid id, FoodStuff foodStuff)
+    private static async Task<IResult> Update(IFoodStuffService foodStuffService, Guid id, FoodStuff foodStuff)
     {
-        var message = new Message<FoodStuff>()
-        {
-            Data = foodStuff,
-            MethodInfo = "put"
-        };
-        await messageService.PublishMessageAsync(message);
-
-        var dto = new ResultDto<string>
-        {
-            IsSuccess = true,
-            Message = "Request was successfully sent to the queue."
-        };
+        var result = await foodStuffService.UpdateAsync(id, foodStuff);
         
-        return Results.Ok(dto);
+        var dto = result.ToDto();
+        
+        if (result.Code == 404)
+        {
+            return Results.NotFound(dto);
+        }
+        
+        return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
     }
 
-    private static async Task<IResult> Delete(IMessageService messageService, Guid id)
+    private static async Task<IResult> Delete(IFoodStuffService foodStuffService, Guid id)
     {
-        var message = new Message<Guid>()
-        {
-            Data = id,
-            MethodInfo = "delete"
-        };
-        await messageService.PublishMessageAsync(message);
-
-        var dto = new ResultDto<string>
-        {
-            IsSuccess = true,
-            Message = "Request was successfully sent to the queue."
-        };
+        var result = await foodStuffService.DeleteAsync(id);
         
-        return Results.Ok(dto);
+        var dto = result.ToDto();
+        
+        if (result.Code == 404)
+        {
+            return Results.NotFound(dto);
+        }
+        
+        return result.IsSuccess ? Results.Ok(dto) : Results.BadRequest(dto);
     }
 }
